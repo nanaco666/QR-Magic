@@ -11,6 +11,8 @@ export enum EffectType {
 
 export type ColorMode = 'solid' | 'gradient';
 
+export type OutputFormat = 'webm' | 'mp4';
+
 export interface ColorConfig {
     mode: ColorMode;
     colorA: string; // Primary/Start Color

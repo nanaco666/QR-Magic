@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { EffectType, AnimationStatus, ColorConfig } from './types';
+import { EffectType, AnimationStatus, ColorConfig, OutputFormat } from './types';
 import DropZone from './components/DropZone';
 import CanvasRenderer from './components/CanvasRenderer';
 
@@ -20,9 +20,15 @@ export default function App() {
   const [colorConfig, setColorConfig] = useState<ColorConfig>(COLOR_PRESETS[2].config);
   const [speed, setSpeed] = useState(1);
   const [particleSize, setParticleSize] = useState(1);
+  const [density, setDensity] = useState(3); // Default to 3px stride
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>('webm');
+  
   const [status, setStatus] = useState<AnimationStatus>('idle');
   const [triggerAnim, setTriggerAnim] = useState(0);
   const [triggerRec, setTriggerRec] = useState(0);
+
+  // UI State for Export Menu
+  const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
   
   const handleFileSelect = (file: File) => {
     const reader = new FileReader();
@@ -36,7 +42,12 @@ export default function App() {
   };
 
   const handlePreview = () => setTriggerAnim(prev => prev + 1);
-  const handleDownload = () => setTriggerRec(prev => prev + 1);
+  
+  const handleExportSelection = (format: OutputFormat) => {
+      setOutputFormat(format);
+      setTriggerRec(prev => prev + 1);
+      setIsExportMenuOpen(false);
+  };
 
   const StepLabel = ({ num, title }: { num: string, title: string }) => (
       <div className="flex items-center gap-3 mb-4">
@@ -184,28 +195,57 @@ export default function App() {
                                 </div>
                             </div>
 
-                            {/* Sliders */}
-                            {['Speed', 'Size'].map((label) => (
-                                <div key={label}>
-                                    <div className="flex justify-between mb-2">
-                                        <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">{label === 'Size' ? 'Particle Mass' : 'Time Dilation'}</label>
-                                        <span className="text-xs font-mono text-neon-blue">
-                                            {label === 'Speed' ? speed.toFixed(1) : particleSize.toFixed(1)}x
-                                        </span>
-                                    </div>
-                                    <input 
-                                        type="range" 
-                                        min="0.5" 
-                                        max="3.0" 
-                                        step={label === 'Speed' ? 0.1 : 0.5}
-                                        value={label === 'Speed' ? speed : particleSize}
-                                        onChange={(e) => label === 'Speed' ? setSpeed(parseFloat(e.target.value)) : setParticleSize(parseFloat(e.target.value))}
-                                        className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
-                                    />
+                            {/* Sliders Section */}
+                            
+                            {/* 1. Time Dilation (Speed) */}
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Time Dilation</label>
+                                    <span className="text-xs font-mono text-neon-blue">{speed.toFixed(1)}x</span>
                                 </div>
-                            ))}
+                                <input 
+                                    type="range" min="0.5" max="3.0" step="0.1"
+                                    value={speed} onChange={(e) => setSpeed(parseFloat(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                            </div>
+
+                            {/* 2. Particle Scale (Size) */}
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Particle Scale</label>
+                                    <span className="text-xs font-mono text-neon-blue">{particleSize.toFixed(1)}x</span>
+                                </div>
+                                <input 
+                                    type="range" min="0.5" max="3.0" step="0.1"
+                                    value={particleSize} onChange={(e) => setParticleSize(parseFloat(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                            </div>
+
+                            {/* 3. Grid Density (Sampling) */}
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Grid Density</label>
+                                    <span className="text-xs font-mono text-neon-blue">
+                                        {density === 1 ? 'ULTRA' : density === 6 ? 'LOW' : `LVL ${7-density}`}
+                                    </span>
+                                </div>
+                                <input 
+                                    type="range" min="1" max="6" step="1"
+                                    value={density} onChange={(e) => setDensity(parseInt(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                                <div className="flex justify-between text-[8px] text-gray-600 font-mono mt-1">
+                                    <span>FINE (1px)</span>
+                                    <span>COARSE (6px)</span>
+                                </div>
+                            </div>
+
                         </div>
                     </section>
+
+                    {/* REMOVED: Section 04 Export Format (Now integrated into button) */}
                 </div>
             </div>
             
@@ -218,18 +258,62 @@ export default function App() {
                 >
                     Run Simulation
                 </button>
-                <button
-                    onClick={handleDownload}
-                    disabled={status === 'recording' || status === 'playing'}
-                    className="py-4 rounded-xl bg-gradient-to-r from-neon-blue to-blue-600 text-black font-bold font-mono text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-[0_0_30px_rgba(0,243,255,0.5)] transition-all disabled:opacity-50 disabled:shadow-none flex items-center justify-center gap-2"
-                >
-                    {status === 'recording' ? (
-                        <>
-                            <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"/>
-                            RECORDING
-                        </>
-                    ) : 'EXPORT VIDEO'}
-                </button>
+                
+                {/* Export Button with Popover Menu */}
+                <div className="relative">
+                    {isExportMenuOpen && status !== 'recording' && (
+                        <div className="absolute bottom-full left-0 right-0 mb-3 bg-[#0a0a0a] border border-glass-border rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] z-50 flex flex-col origin-bottom animate-popup">
+                             <div className="text-[9px] text-gray-500 font-mono p-2 bg-white/5 uppercase tracking-widest border-b border-white/5">Select Format</div>
+                             <button 
+                                onClick={() => handleExportSelection('webm')}
+                                className="p-3 hover:bg-neon-blue/20 hover:text-white text-gray-300 text-left text-xs font-mono font-bold transition-colors flex justify-between group"
+                             >
+                                 <span>.WEBM</span>
+                                 <span className="opacity-0 group-hover:opacity-100 text-neon-blue">→</span>
+                             </button>
+                             <div className="h-[1px] bg-white/5"></div>
+                             <button 
+                                onClick={() => handleExportSelection('mp4')}
+                                className="p-3 hover:bg-neon-purple/20 hover:text-white text-gray-300 text-left text-xs font-mono font-bold transition-colors flex justify-between group"
+                             >
+                                 <span>.MP4 <span className="text-[8px] bg-neon-purple/20 text-neon-purple px-1 rounded ml-1">BETA</span></span>
+                                 <span className="opacity-0 group-hover:opacity-100 text-neon-purple">→</span>
+                             </button>
+                        </div>
+                    )}
+                    
+                    <button
+                        onClick={() => {
+                            if (status !== 'recording') {
+                                setIsExportMenuOpen(!isExportMenuOpen);
+                            }
+                        }}
+                        disabled={status === 'recording' || status === 'playing'}
+                        className="w-full h-full py-4 rounded-xl bg-gradient-to-r from-neon-blue to-blue-600 text-black font-bold font-mono text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-[0_0_30px_rgba(0,243,255,0.5)] transition-all disabled:opacity-50 disabled:shadow-none flex items-center justify-center gap-2"
+                    >
+                        {status === 'recording' ? (
+                            <>
+                                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"/>
+                                RECORDING
+                            </>
+                        ) : (
+                            <>
+                                EXPORT VIDEO
+                                <span className={`transition-transform duration-300 ${isExportMenuOpen ? 'rotate-180' : ''}`}>
+                                    ▼
+                                </span>
+                            </>
+                        )}
+                    </button>
+                    
+                    {/* Backdrop to close menu when clicking outside */}
+                    {isExportMenuOpen && (
+                        <div 
+                            className="fixed inset-0 z-40 bg-transparent"
+                            onClick={() => setIsExportMenuOpen(false)}
+                        ></div>
+                    )}
+                </div>
             </div>
         </div>
 
@@ -271,9 +355,11 @@ export default function App() {
                                 colorConfig={colorConfig}
                                 speed={speed}
                                 particleSizeMultiplier={particleSize}
+                                density={density}
                                 onStatusChange={setStatus}
                                 triggerAnimation={triggerAnim} 
                                 triggerRecording={triggerRec} 
+                                outputFormat={outputFormat}
                              />
                         )}
                     </div>
