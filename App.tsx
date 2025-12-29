@@ -78,7 +78,7 @@ export default function App() {
         
         {/* Left Column: Control Deck */}
         <div className="lg:col-span-4 flex flex-col gap-6 relative z-20">
-            <div className="bg-glass-100 backdrop-blur-xl border border-glass-border rounded-2xl p-6 shadow-2xl flex flex-col gap-8 max-h-[85vh] overflow-y-auto custom-scrollbar">
+            <div className="bg-glass-100 backdrop-blur-xl border border-glass-border rounded-2xl p-6 shadow-2xl flex flex-col gap-8 lg:max-h-[85vh] lg:overflow-y-auto custom-scrollbar">
                 
                 {/* 1. UPLOAD */}
                 <section>
