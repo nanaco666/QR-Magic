@@ -1,26 +1,32 @@
+
 export enum EffectType {
-  CONVERGE = 'CONVERGE',
-  SPIRAL = 'SPIRAL',
-  MATRIX = 'MATRIX',
-  EXPLOSION = 'EXPLOSION',
-  VORTEX = 'VORTEX',
-  RAINDROP = 'RAINDROP',
-  SCANWAVE = 'SCANWAVE',
+  ASSEMBLE = 'ASSEMBLE', // Renamed from CONVERGE for clarity
+  ELASTIC = 'ELASTIC',   // New: Bouncy arrival
+  GALACTIC = 'GALACTIC', // Renamed/Refined Spiral
+  GLITCH = 'GLITCH',     // New: Cyberpunk teleport
+  LIQUID = 'LIQUID',     // New: Sine wave flow
+  VORTEX = 'VORTEX',     // Existing
+  SCANWAVE = 'SCANWAVE', // Existing
 }
 
-export type ColorTheme = 'white' | 'matrix' | 'neon' | 'fire' | 'rainbow';
+export type ColorMode = 'solid' | 'gradient';
+
+export interface ColorConfig {
+    mode: ColorMode;
+    colorA: string; // Primary/Start Color
+    colorB: string; // Secondary/End Color
+}
 
 export interface Particle {
-  x: number;
-  y: number;
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
   targetX: number;
   targetY: number;
-  vx: number;
-  vy: number;
-  color: string;
   size: number;
-  delay: number;
-  active: boolean;
+  delay: number; // 0 to 1 range relative to total animation time
+  color?: string; // Optional per-particle override (for complex gradients)
 }
 
 export interface Point {

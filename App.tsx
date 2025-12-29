@@ -1,24 +1,29 @@
+
 import React, { useState } from 'react';
-import { EffectType, AnimationStatus, ColorTheme } from './types';
+import { EffectType, AnimationStatus, ColorConfig } from './types';
 import DropZone from './components/DropZone';
 import CanvasRenderer from './components/CanvasRenderer';
-import { generateSocialCaption } from './services/geminiService';
+
+// --- Presets ---
+const COLOR_PRESETS: { name: string, config: ColorConfig }[] = [
+    { name: 'Whiteout', config: { mode: 'solid', colorA: '#ffffff', colorB: '#ffffff' } },
+    { name: 'Matrix', config: { mode: 'solid', colorA: '#00ff00', colorB: '#00ff00' } },
+    { name: 'Cyberpunk', config: { mode: 'gradient', colorA: '#00f3ff', colorB: '#bc13fe' } },
+    { name: 'Sunset', config: { mode: 'gradient', colorA: '#ff512f', colorB: '#dd2476' } },
+    { name: 'Gold', config: { mode: 'gradient', colorA: '#FDC830', colorB: '#F37335' } },
+    { name: 'Deep Sea', config: { mode: 'gradient', colorA: '#2b5876', colorB: '#4e4376' } },
+];
 
 export default function App() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [effect, setEffect] = useState<EffectType>(EffectType.CONVERGE);
-  const [colorTheme, setColorTheme] = useState<ColorTheme>('white');
+  const [effect, setEffect] = useState<EffectType>(EffectType.ASSEMBLE);
+  const [colorConfig, setColorConfig] = useState<ColorConfig>(COLOR_PRESETS[2].config);
   const [speed, setSpeed] = useState(1);
   const [particleSize, setParticleSize] = useState(1);
   const [status, setStatus] = useState<AnimationStatus>('idle');
   const [triggerAnim, setTriggerAnim] = useState(0);
   const [triggerRec, setTriggerRec] = useState(0);
   
-  // AI Feature State
-  const [contextInput, setContextInput] = useState('');
-  const [caption, setCaption] = useState('');
-  const [isGeneratingCaption, setIsGeneratingCaption] = useState(false);
-
   const handleFileSelect = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -30,262 +35,259 @@ export default function App() {
     reader.readAsDataURL(file);
   };
 
-  const handlePreview = () => {
-    setTriggerAnim(prev => prev + 1);
-  };
+  const handlePreview = () => setTriggerAnim(prev => prev + 1);
+  const handleDownload = () => setTriggerRec(prev => prev + 1);
 
-  const handleDownload = () => {
-    setTriggerRec(prev => prev + 1);
-  };
-
-  const handleGenerateCaption = async () => {
-    if (!contextInput) return;
-    setIsGeneratingCaption(true);
-    setCaption('');
-    const result = await generateSocialCaption(contextInput);
-    setCaption(result);
-    setIsGeneratingCaption(false);
-  };
+  const StepLabel = ({ num, title }: { num: string, title: string }) => (
+      <div className="flex items-center gap-3 mb-4">
+          <span className="font-mono text-xs text-black bg-neon-blue px-1.5 py-0.5 rounded font-bold">{num}</span>
+          <h2 className="text-sm font-bold text-gray-200 tracking-wider uppercase">{title}</h2>
+      </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen text-white selection:bg-neon-blue selection:text-black flex flex-col">
       {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                </div>
-                <h1 className="text-xl font-bold tracking-tight">QR Particle Magic</h1>
-            </div>
-            <div className="text-sm text-gray-400">
-                Created with Gemini API
-            </div>
-        </div>
+      <header className="absolute top-0 left-0 right-0 z-50 px-6 py-6 flex justify-between items-center pointer-events-none">
+         <div className="flex items-center gap-2 pointer-events-auto">
+             <div className="w-2 h-8 bg-neon-blue rounded-full shadow-[0_0_15px_#00f3ff]"></div>
+             <div>
+                <h1 className="text-2xl font-bold tracking-tight leading-none">QR MAGIC</h1>
+                <p className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Particle System v1.1</p>
+             </div>
+         </div>
+         <div className="pointer-events-auto">
+             <a href="https://github.com/nanaco666/nana" target="_blank" rel="noreferrer" className="text-xs font-mono text-gray-500 hover:text-white transition-colors border border-white/10 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md">
+                 GITHUB REPO
+             </a>
+         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <main className="flex-1 max-w-[1600px] mx-auto w-full p-6 pt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 h-full">
         
-        {/* Left Column: Controls & Inputs */}
-        <div className="lg:col-span-4 space-y-8">
-            
-            {/* Step 1: Upload */}
-            <section>
-                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-blue-900 text-blue-300 flex items-center justify-center text-xs">1</span>
-                    Upload QR
-                </h2>
-                {!imageSrc ? (
-                    <DropZone onFileSelect={handleFileSelect} />
-                ) : (
-                    <div className="flex items-center gap-4 bg-gray-900 p-4 rounded-xl border border-gray-800">
-                        <img src={imageSrc} alt="Preview" className="w-16 h-16 rounded bg-white p-1" />
-                        <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-medium truncate text-white">QR Code Loaded</p>
-                            <button 
-                                onClick={() => setImageSrc(null)}
-                                className="text-xs text-red-400 hover:text-red-300 hover:underline mt-1"
-                            >
-                                Remove & Upload New
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </section>
-
-            {/* Step 2: Choose Effect */}
-            <section className={!imageSrc ? 'opacity-50 pointer-events-none' : ''}>
-                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-blue-900 text-blue-300 flex items-center justify-center text-xs">2</span>
-                    Select Animation
-                </h2>
-                <div className="grid grid-cols-3 gap-2">
-                    {Object.values(EffectType).map((t) => (
-                        <button
-                            key={t}
-                            type="button"
-                            onClick={() => setEffect(t)}
-                            className={`px-2 py-3 rounded-lg border text-xs font-medium transition-all ${
-                                effect === t 
-                                ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/50' 
-                                : 'bg-gray-900 border-gray-800 text-gray-400 hover:border-gray-600'
-                            }`}
-                        >
-                            {t.charAt(0) + t.slice(1).toLowerCase()}
-                        </button>
-                    ))}
-                </div>
-            </section>
-
-             {/* Step 3: Fine Tune (The "Joystick") */}
-            <section className={!imageSrc ? 'opacity-50 pointer-events-none' : ''}>
-                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-blue-900 text-blue-300 flex items-center justify-center text-xs">3</span>
-                    Fine Tune
-                </h2>
-                <div className="bg-gray-900/50 rounded-xl p-5 border border-gray-800 space-y-5">
-                    
-                    {/* Color Theme Selector */}
-                    <div>
-                        <label className="text-xs text-gray-400 mb-2 block font-semibold">Particle Color</label>
-                        <div className="flex gap-2">
-                             {(['white', 'matrix', 'neon', 'fire', 'rainbow'] as ColorTheme[]).map(theme => (
-                                 <button
-                                    key={theme}
-                                    onClick={() => setColorTheme(theme)}
-                                    className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${
-                                        colorTheme === theme ? 'border-white scale-110 ring-2 ring-blue-500/50' : 'border-transparent'
-                                    }`}
-                                    style={{
-                                        background: theme === 'white' ? '#fff' 
-                                            : theme === 'matrix' ? '#0f0' 
-                                            : theme === 'fire' ? 'linear-gradient(to bottom right, #f00, #ff0)' 
-                                            : theme === 'neon' ? 'linear-gradient(to bottom right, #0ff, #f0f)'
-                                            : 'linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet)'
-                                    }}
-                                    title={theme.charAt(0).toUpperCase() + theme.slice(1)}
-                                 />
-                             ))}
-                        </div>
-                    </div>
-
-                    {/* Speed Slider */}
-                    <div>
-                        <div className="flex justify-between mb-2">
-                            <label className="text-xs text-gray-400 font-semibold">Animation Speed</label>
-                            <span className="text-xs text-blue-400 font-mono">{speed.toFixed(1)}x</span>
-                        </div>
-                        <input 
-                            type="range" 
-                            min="0.5" 
-                            max="3.0" 
-                            step="0.1" 
-                            value={speed}
-                            onChange={(e) => setSpeed(parseFloat(e.target.value))}
-                            className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400"
-                        />
-                    </div>
-
-                    {/* Size Slider */}
-                    <div>
-                        <div className="flex justify-between mb-2">
-                            <label className="text-xs text-gray-400 font-semibold">Particle Size</label>
-                            <span className="text-xs text-blue-400 font-mono">{particleSize.toFixed(1)}x</span>
-                        </div>
-                        <input 
-                            type="range" 
-                            min="0.5" 
-                            max="3.0" 
-                            step="0.5" 
-                            value={particleSize}
-                            onChange={(e) => setParticleSize(parseFloat(e.target.value))}
-                            className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400"
-                        />
-                    </div>
-                </div>
-            </section>
-
-             {/* Step 4: AI Caption */}
-             <section className={!imageSrc ? 'opacity-50 pointer-events-none' : ''}>
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-purple-900 text-purple-300 flex items-center justify-center text-xs">AI</span>
-                        Gemini Caption
-                    </h2>
-                </div>
-                <div className="bg-gray-900/50 rounded-xl p-4 border border-gray-800">
-                    <p className="text-xs text-gray-400 mb-3">Tell Gemini what this QR is for to get a viral caption.</p>
-                    <div className="flex gap-2 mb-3">
-                        <input 
-                            type="text" 
-                            placeholder="e.g. My Portfolio"
-                            className="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition-colors"
-                            value={contextInput}
-                            onChange={(e) => setContextInput(e.target.value)}
-                        />
-                        <button 
-                            type="button"
-                            onClick={handleGenerateCaption}
-                            disabled={isGeneratingCaption || !contextInput}
-                            className="bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded-lg text-sm font-medium disabled:opacity-50 transition-colors"
-                        >
-                            {isGeneratingCaption ? '...' : 'Generate'}
-                        </button>
-                    </div>
-                    {caption && (
-                        <div className="bg-gray-950 p-3 rounded border border-gray-800 relative group">
-                            <p className="text-sm text-gray-200 italic">"{caption}"</p>
-                            <button 
-                                type="button"
-                                onClick={() => navigator.clipboard.writeText(caption)}
-                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-gray-800 text-xs px-2 py-1 rounded hover:bg-gray-700 transition-opacity"
-                            >
-                                Copy
-                            </button>
+        {/* Left Column: Control Deck */}
+        <div className="lg:col-span-4 flex flex-col gap-6 relative z-20">
+            <div className="bg-glass-100 backdrop-blur-xl border border-glass-border rounded-2xl p-6 shadow-2xl flex flex-col gap-8 max-h-[85vh] overflow-y-auto custom-scrollbar">
+                
+                {/* 1. UPLOAD */}
+                <section>
+                    <StepLabel num="01" title="Data Input" />
+                    {!imageSrc ? (
+                        <DropZone onFileSelect={handleFileSelect} />
+                    ) : (
+                        <div className="flex items-center gap-4 bg-glass-200 p-3 rounded-xl border border-white/5 group relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-r from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <img src={imageSrc} alt="Preview" className="w-12 h-12 rounded border border-white/20 p-0.5 bg-black" />
+                            <div className="flex-1 z-10">
+                                <p className="text-xs font-mono text-neon-blue mb-0.5">STATUS: LOADED</p>
+                                <button 
+                                    onClick={() => setImageSrc(null)}
+                                    className="text-xs text-gray-400 hover:text-white underline decoration-gray-600 hover:decoration-white transition-all"
+                                >
+                                    EJECT CARTRIDGE
+                                </button>
+                            </div>
                         </div>
                     )}
-                </div>
-            </section>
+                </section>
 
-             {/* Step 5: Actions */}
-             <section className={!imageSrc ? 'opacity-50 pointer-events-none' : ''}>
-                <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-blue-900 text-blue-300 flex items-center justify-center text-xs">4</span>
-                    Export
-                </h2>
-                <div className="flex flex-col gap-3">
-                    <button
-                        type="button"
-                        onClick={handlePreview}
-                        disabled={status === 'recording' || status === 'playing'}
-                        className="w-full py-3 rounded-lg bg-gray-800 hover:bg-gray-700 text-white font-medium border border-gray-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        Preview Animation
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleDownload}
-                        disabled={status === 'recording' || status === 'playing'}
-                        className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-blue-900/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                        {status === 'recording' ? (
-                            <span className="flex items-center gap-2">
-                                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
-                                Rendering Video...
-                            </span>
-                        ) : (
-                            <>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                Record & Download
-                            </>
-                        )}
-                    </button>
+                <div className={`space-y-8 transition-all duration-500 ${!imageSrc ? 'opacity-30 pointer-events-none blur-[2px]' : ''}`}>
+                    
+                    {/* 2. EFFECT SELECTOR */}
+                    <section>
+                        <StepLabel num="02" title="Animation Engine" />
+                        <div className="grid grid-cols-2 gap-2">
+                            {Object.values(EffectType).map((t) => (
+                                <button
+                                    key={t}
+                                    onClick={() => setEffect(t)}
+                                    className={`px-3 py-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all border relative overflow-hidden group text-left
+                                        ${effect === t 
+                                        ? 'bg-neon-blue/10 border-neon-blue text-neon-blue shadow-[0_0_15px_rgba(0,243,255,0.2)]' 
+                                        : 'bg-glass-200 border-transparent text-gray-400 hover:bg-glass-300 hover:text-white'
+                                    }`}
+                                >
+                                    <span className="relative z-10">{t}</span>
+                                    {effect === t && <div className="absolute inset-0 bg-neon-blue/5 animate-pulse"></div>}
+                                </button>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* 3. TUNING */}
+                    <section>
+                        <StepLabel num="03" title="Visual Style" />
+                        <div className="bg-black/20 rounded-xl p-5 border border-white/5 space-y-6">
+                            
+                            {/* Color Palette */}
+                            <div>
+                                <div className="flex justify-between items-center mb-3">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Color Mode</label>
+                                    <div className="flex bg-black/40 rounded-lg p-0.5 border border-white/10">
+                                        {(['solid', 'gradient'] as const).map(m => (
+                                            <button 
+                                                key={m}
+                                                onClick={() => setColorConfig(prev => ({ ...prev, mode: m }))}
+                                                className={`px-3 py-1 text-[10px] uppercase font-bold rounded-md transition-all ${colorConfig.mode === m ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'}`}
+                                            >
+                                                {m}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-4 mb-4">
+                                     {/* Color Inputs */}
+                                     <div className="relative group">
+                                         <input type="color" value={colorConfig.colorA} onChange={(e) => setColorConfig(prev => ({...prev, colorA: e.target.value}))} className="w-10 h-10 rounded cursor-pointer border-none p-0 bg-transparent opacity-0 absolute inset-0 z-10" />
+                                         <div className="w-10 h-10 rounded border border-white/20" style={{backgroundColor: colorConfig.colorA}}></div>
+                                         <span className="text-[10px] text-gray-500 font-mono mt-1 block text-center">A</span>
+                                     </div>
+                                     
+                                     {colorConfig.mode === 'gradient' && (
+                                         <>
+                                            <span className="text-gray-600">→</span>
+                                            <div className="relative group">
+                                                <input type="color" value={colorConfig.colorB} onChange={(e) => setColorConfig(prev => ({...prev, colorB: e.target.value}))} className="w-10 h-10 rounded cursor-pointer border-none p-0 bg-transparent opacity-0 absolute inset-0 z-10" />
+                                                <div className="w-10 h-10 rounded border border-white/20" style={{backgroundColor: colorConfig.colorB}}></div>
+                                                <span className="text-[10px] text-gray-500 font-mono mt-1 block text-center">B</span>
+                                            </div>
+                                         </>
+                                     )}
+                                     
+                                     <div className="flex-1 h-10 rounded border border-white/10 ml-4 overflow-hidden relative">
+                                         <div className="absolute inset-0" style={{
+                                             background: colorConfig.mode === 'solid' 
+                                                ? colorConfig.colorA 
+                                                : `linear-gradient(90deg, ${colorConfig.colorA}, ${colorConfig.colorB})`
+                                         }}></div>
+                                         <div className="absolute inset-0 flex items-center justify-center text-[10px] font-mono font-bold text-black/50 mix-blend-overlay uppercase tracking-widest">Preview</div>
+                                     </div>
+                                </div>
+
+                                {/* Presets */}
+                                <div className="grid grid-cols-6 gap-2">
+                                    {COLOR_PRESETS.map((preset) => (
+                                        <button
+                                            key={preset.name}
+                                            onClick={() => setColorConfig(preset.config)}
+                                            className="aspect-square rounded-full border border-white/10 hover:scale-110 transition-transform relative overflow-hidden group"
+                                            title={preset.name}
+                                        >
+                                            <div className="absolute inset-0" style={{
+                                                background: preset.config.mode === 'solid' 
+                                                    ? preset.config.colorA 
+                                                    : `linear-gradient(135deg, ${preset.config.colorA}, ${preset.config.colorB})`
+                                            }}></div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Sliders */}
+                            {['Speed', 'Size'].map((label) => (
+                                <div key={label}>
+                                    <div className="flex justify-between mb-2">
+                                        <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">{label === 'Size' ? 'Particle Mass' : 'Time Dilation'}</label>
+                                        <span className="text-xs font-mono text-neon-blue">
+                                            {label === 'Speed' ? speed.toFixed(1) : particleSize.toFixed(1)}x
+                                        </span>
+                                    </div>
+                                    <input 
+                                        type="range" 
+                                        min="0.5" 
+                                        max="3.0" 
+                                        step={label === 'Speed' ? 0.1 : 0.5}
+                                        value={label === 'Speed' ? speed : particleSize}
+                                        onChange={(e) => label === 'Speed' ? setSpeed(parseFloat(e.target.value)) : setParticleSize(parseFloat(e.target.value))}
+                                        className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className={`grid grid-cols-2 gap-4 ${!imageSrc ? 'opacity-30 pointer-events-none' : ''}`}>
+                 <button
+                    onClick={handlePreview}
+                    disabled={status === 'recording' || status === 'playing'}
+                    className="py-4 rounded-xl bg-glass-100 hover:bg-glass-200 border border-glass-border text-white font-mono text-xs uppercase tracking-widest transition-all hover:border-white/30 disabled:opacity-50"
+                >
+                    Run Simulation
+                </button>
+                <button
+                    onClick={handleDownload}
+                    disabled={status === 'recording' || status === 'playing'}
+                    className="py-4 rounded-xl bg-gradient-to-r from-neon-blue to-blue-600 text-black font-bold font-mono text-xs uppercase tracking-widest shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-[0_0_30px_rgba(0,243,255,0.5)] transition-all disabled:opacity-50 disabled:shadow-none flex items-center justify-center gap-2"
+                >
+                    {status === 'recording' ? (
+                        <>
+                            <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"/>
+                            RECORDING
+                        </>
+                    ) : 'EXPORT VIDEO'}
+                </button>
+            </div>
         </div>
 
-        {/* Right Column: Canvas/Preview */}
-        <div className="lg:col-span-8 bg-gray-900/30 rounded-3xl border border-gray-800 p-8 flex items-center justify-center min-h-[500px] backdrop-blur-sm relative">
-             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-gray-950/0 to-gray-950/0 pointer-events-none" />
+        {/* Right Column: The Stage */}
+        <div className="lg:col-span-8 flex items-center justify-center relative min-h-[500px] lg:h-auto">
              
-             {!imageSrc ? (
-                 <div className="text-center text-gray-500">
-                     <svg className="w-16 h-16 mx-auto mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                     <p>Upload a QR Code to begin</p>
-                 </div>
-             ) : (
-                 <CanvasRenderer 
-                    imageSrc={imageSrc} 
-                    effect={effect}
-                    colorTheme={colorTheme}
-                    speed={speed}
-                    particleSizeMultiplier={particleSize}
-                    onStatusChange={setStatus}
-                    triggerAnimation={triggerAnim} 
-                    triggerRecording={triggerRec} 
-                 />
-             )}
+             {/* Decorative Background Elements behind Canvas */}
+             <div className="absolute inset-0 pointer-events-none">
+                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-neon-blue/5 rounded-full blur-[100px]"></div>
+                 <div className="absolute top-10 right-10 w-24 h-24 border-t-2 border-r-2 border-white/10 rounded-tr-3xl"></div>
+                 <div className="absolute bottom-10 left-10 w-24 h-24 border-b-2 border-l-2 border-white/10 rounded-bl-3xl"></div>
+             </div>
+
+             <div className="relative z-10 group">
+                {/* Holographic Frame */}
+                <div className={`
+                    relative p-1 rounded-2xl transition-all duration-500
+                    ${status === 'recording' 
+                        ? 'bg-gradient-to-b from-red-500 via-transparent to-red-500 shadow-[0_0_50px_rgba(239,68,68,0.3)]' 
+                        : 'bg-gradient-to-b from-gray-700 via-gray-900 to-gray-700 shadow-2xl'
+                    }
+                `}>
+                     {/* Inner Black Box */}
+                    <div className="bg-black rounded-xl overflow-hidden relative">
+                         {/* Scanline Overlay */}
+                         <div className="absolute inset-0 z-20 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] opacity-20"></div>
+                         
+                         {!imageSrc ? (
+                            <div className="w-[350px] md:w-[600px] h-[350px] md:h-[600px] flex flex-col items-center justify-center text-gray-600 space-y-4 border border-white/5">
+                                <div className="w-16 h-16 border border-gray-700 rounded-full flex items-center justify-center">
+                                    <div className="w-1.5 h-1.5 bg-gray-700 rounded-full"></div>
+                                </div>
+                                <p className="font-mono text-xs uppercase tracking-[0.2em]">System Standby</p>
+                            </div>
+                        ) : (
+                             <CanvasRenderer 
+                                imageSrc={imageSrc} 
+                                effect={effect}
+                                colorConfig={colorConfig}
+                                speed={speed}
+                                particleSizeMultiplier={particleSize}
+                                onStatusChange={setStatus}
+                                triggerAnimation={triggerAnim} 
+                                triggerRecording={triggerRec} 
+                             />
+                        )}
+                    </div>
+                </div>
+
+                {/* Status Indicator */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 text-[10px] font-mono tracking-widest text-gray-500 uppercase">
+                    <span className={status === 'idle' ? 'text-neon-green' : ''}>Ready</span>
+                    <span className="text-gray-700">/</span>
+                    <span className={status === 'playing' ? 'text-neon-blue' : ''}>Active</span>
+                    <span className="text-gray-700">/</span>
+                    <span className={status === 'recording' ? 'text-red-500 animate-pulse' : ''}>REC</span>
+                </div>
+             </div>
         </div>
       </main>
     </div>
