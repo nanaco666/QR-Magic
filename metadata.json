@@ -1,0 +1,5 @@
+{
+  "name": "QR Particle Magic",
+  "description": "Transform standard QR codes into stunning particle animations. Upload a QR code, choose a visual effect (Galaxy, Matrix, Assemble), and export a video ready for social media.",
+  "requestFramePermissions": []
+}
