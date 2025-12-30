@@ -41,21 +41,21 @@
   <tr>
     <td align="center" width="33%" style="border: none; padding: 10px;">
       <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
-        <img src="![Image](https://github.com/user-attachments/assets/007bc05d-27c6-455f-ae65-f5b00d73fca6)" width="100%" style="border-radius: 4px;" alt="Assemble Effect" />
+        <img src="https://github.com/user-attachments/assets/007bc05d-27c6-455f-ae65-f5b00d73fca6" width="100%" style="border-radius: 4px;" alt="Assemble Effect" />
         <br/>
         <code style="color: #00f3ff; font-size: 10px;">MODE: ASSEMBLE</code>
       </div>
     </td>
     <td align="center" width="33%" style="border: none; padding: 10px;">
       <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
-        <img src="![Image](https://github.com/user-attachments/assets/4fd400fd-1f8c-4589-925d-ee608089a573)" width="100%" style="border-radius: 4px;" alt="Stipple Effect" />
+        <img src="https://github.com/user-attachments/assets/4fd400fd-1f8c-4589-925d-ee608089a573" width="100%" style="border-radius: 4px;" alt="Stipple Effect" />
         <br/>
         <code style="color: #bc13fe; font-size: 10px;">MODE: STIPPLE</code>
       </div>
     </td>
     <td align="center" width="33%" style="border: none; padding: 10px;">
       <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
-        <img src="![Image](https://github.com/user-attachments/assets/4b4e68a3-d9ed-4caa-a566-32008a56ddf0)" width="100%" style="border-radius: 4px;" alt="Liquid Effect" />
+        <img src="https://github.com/user-attachments/assets/4b4e68a3-d9ed-4caa-a566-32008a56ddf0" width="100%" style="border-radius: 4px;" alt="Liquid Effect" />
         <br/>
         <code style="color: #0aff00; font-size: 10px;">MODE: LIQUID</code>
       </div>
