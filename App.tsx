@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { EffectType, AnimationStatus, ColorConfig, OutputFormat, ParticleShape } from './types';
 import DropZone from './components/DropZone';
 import CanvasRenderer from './components/CanvasRenderer';
@@ -439,6 +440,7 @@ export default function App() {
              </div>
         </div>
       </main>
+      <SpeedInsights />
     </div>
   );
 }
