@@ -1,73 +1,91 @@
-# QR Particle Magic (v1.0)
 
-A web application that transforms standard QR codes into stunning, animated particle videos. Built with React, Canvas API, and Google Gemini API.
+<div align="center">
+  <br />
+  <div style="background: linear-gradient(to right, #00f3ff, #bc13fe); padding: 2px; border-radius: 20px; display: inline-block;">
+    <div style="background: #000; padding: 20px; border-radius: 18px;">
+        <h1 style="margin: 0; font-size: 60px; background: -webkit-linear-gradient(0deg, #ffffff, #888888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">QR MAGIC</h1>
+    </div>
+  </div>
 
-## 🌟 Features
+  <h3 style="color: #888; margin-top: 20px;">Turn Boring QR Codes into Cinematic Particle Animations</h3>
 
-*   **QR Code Processing**: Uploads and analyzes QR code images to extract pixel data.
-*   **Particle Engine**: Custom physics engine supporting multiple animation behaviors.
-    *   *Effects*: Converge, Spiral, Matrix, Explosion, Vortex, Raindrop, Scanwave.
-*   **Fine-Tuning System**: 
-    *   Speed Control (0.5x - 3.0x).
-    *   Particle Size Control.
-    *   Color Themes (White, Matrix Green, Neon, Fire, Rainbow).
-*   **Visual Fidelity**: Ensures the final frame (and "ghost" background) matches the user's selected color theme for 100% scannability.
-*   **AI Integration**: Google Gemini API integration to generate viral social media captions based on user context.
-*   **Export**: Client-side rendering and recording to `.webm` video format.
+  <p align="center">
+    <a href="https://twitter.com/xwen_h">
+      <img src="https://img.shields.io/badge/Creator-@xwen__h-000000?style=for-the-badge&logo=x&logoColor=white" alt="Twitter"/>
+    </a>
+    <a href="https://react.dev">
+      <img src="https://img.shields.io/badge/Built%20With-React%2018-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"/>
+    </a>
+     <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/Typed-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"/>
+    </a>
+  </p>
 
-## 📂 Project Structure
+  <br/>
 
-```
-/
-├── index.html              # Entry HTML
-├── index.tsx               # Entry React render
-├── App.tsx                 # Main Application Layout & State Management
-├── metadata.json           # Application Metadata
-├── types.ts                # TypeScript Interfaces & Enums
-├── components/
-│   ├── DropZone.tsx        # File Upload Component
-│   └── CanvasRenderer.tsx  # Core Animation & Recording Logic (Canvas API)
-├── services/
-│   ├── imageProcessor.ts   # Pixel extraction logic
-│   └── geminiService.ts    # AI Caption generation logic
-└── docs/                   # (Optional) Additional documentation
-```
+  <!-- 🚨 REPLACE THIS LINK WITH YOUR VERCEL URL -->
+  <a href="https://qr-particle-magic.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_LAUNCH_APP-CLICK_TO_USE_NOW-00f3ff?style=for-the-badge&logo=vercel&logoColor=black&labelColor=black" height="50" alt="Launch App" />
+  </a>
 
-## 🚀 Getting Started
+  <br/>
+  <br/>
 
-### Prerequisites
+  <!-- 📸 PLACEHOLDER FOR GIF: Upload a gif to your repo in /docs/demo.gif to make this work -->
+  <!-- <img src="docs/demo.gif" width="100%" style="border-radius: 10px; border: 1px solid #333;" alt="Demo Preview" /> -->
+</div>
 
-*   Node.js installed.
-*   A Google Cloud Project with Gemini API Key (for caption features).
+<hr />
 
-### Installation
+## 🔮 What is this?
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/nanaco666/nana.git
-    cd nana
-    ```
+**QR Magic** is an experimental visual tool that decompiles standard QR codes into thousands of interactive particles. It allows creators, marketers, and cyber-enthusiasts to turn static functional images into engaging video content for social media.
 
-2.  Install dependencies (if using a local bundler like Vite/Parcel):
-    ```bash
-    npm install
-    ```
+This project serves as a playground for **Canvas API** performance tuning and **React** state management.
 
-3.  Set up Environment Variables:
-    Create a `.env` file and add:
-    ```
-    API_KEY=your_google_gemini_api_key
-    ```
+## ✨ Key Features
 
-4.  Run the development server.
+| Feature | Description |
+| :--- | :--- |
+| **🎨 Multiple Engines** | Choose from **Stipple**, **Galactic Vortex**, **Glitch**, **Liquid**, and more. |
+| **🎛️ Full Control** | Fine-tune particle **size**, **speed**, **glow**, and **trail persistence**. |
+| **📹 Client-Side Export** | Record high-quality `.webm` or `.mp4` videos directly in the browser. |
+| **🛡️ Privacy First** | 100% Client-side processing. Your QR data never leaves your device. |
 
 ## 🛠 Tech Stack
 
-*   **Frontend**: React 19, TypeScript
-*   **Styling**: Tailwind CSS
-*   **Graphics**: HTML5 Canvas API
-*   **AI**: @google/genai SDK
+*   **Core**: React 19, TypeScript, Vite
+*   **Visuals**: HTML5 Canvas API (No external game engines)
+*   **Styling**: TailwindCSS, Glassmorphism UI
+*   **Video**: `mp4-muxer` & `MediaRecorder` API
 
-## 📝 License
+## 🚀 Quick Start (Local Dev)
 
-This project is created for educational and creative purposes.
+If you want to run this locally or contribute:
+
+```bash
+# 1. Clone the magic
+git clone https://github.com/nanaco666/QR-Magic.git
+
+# 2. Enter the void
+cd QR-Magic
+
+# 3. Install spells
+npm install
+
+# 4. Cast spell
+npm run dev
+```
+
+## 🤝 Connect
+
+I build cool things for the web. Follow my journey:
+
+*   **X (Twitter)**: [@xwen_h](https://x.com/xwen_h)
+*   **GitHub**: [nanaco666](https://github.com/nanaco666)
+
+---
+
+<div align="center">
+  <p style="color: #666; font-size: 12px;">Created with 💙 by Nana. Licensed under MIT.</p>
+</div>
