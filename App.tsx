@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { EffectType, AnimationStatus, ColorConfig, OutputFormat } from './types';
+import { EffectType, AnimationStatus, ColorConfig, OutputFormat, ParticleShape } from './types';
 import DropZone from './components/DropZone';
 import CanvasRenderer from './components/CanvasRenderer';
 
@@ -16,11 +16,15 @@ const COLOR_PRESETS: { name: string, config: ColorConfig }[] = [
 
 export default function App() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [effect, setEffect] = useState<EffectType>(EffectType.ASSEMBLE);
+  const [effect, setEffect] = useState<EffectType>(EffectType.STIPPLE); // Default to new trendy effect
   const [colorConfig, setColorConfig] = useState<ColorConfig>(COLOR_PRESETS[2].config);
   const [speed, setSpeed] = useState(1);
   const [particleSize, setParticleSize] = useState(1);
-  const [density, setDensity] = useState(3); // Default to 3px stride
+  const [sizeVariance, setSizeVariance] = useState(1); 
+  const [density, setDensity] = useState(3); 
+  const [shape, setShape] = useState<ParticleShape>('circle');
+  const [glow, setGlow] = useState(15); // Glow Strength
+  const [trail, setTrail] = useState(0.2); // Trail Persistence
   const [outputFormat, setOutputFormat] = useState<OutputFormat>('webm');
   
   const [status, setStatus] = useState<AnimationStatus>('idle');
@@ -64,7 +68,7 @@ export default function App() {
              <div className="w-2 h-8 bg-neon-blue rounded-full shadow-[0_0_15px_#00f3ff]"></div>
              <div>
                 <h1 className="text-2xl font-bold tracking-tight leading-none">QR MAGIC</h1>
-                <p className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Particle System v1.1</p>
+                <p className="text-[10px] text-gray-400 font-mono tracking-[0.2em] uppercase">Particle System v2.2 Glow</p>
              </div>
          </div>
          <div className="pointer-events-auto">
@@ -130,6 +134,24 @@ export default function App() {
                         <StepLabel num="03" title="Visual Style" />
                         <div className="bg-black/20 rounded-xl p-5 border border-white/5 space-y-6">
                             
+                             {/* Particle Shape Selector */}
+                             <div>
+                                <div className="flex justify-between items-center mb-3">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Particle Shape</label>
+                                    <div className="flex bg-black/40 rounded-lg p-0.5 border border-white/10">
+                                        {(['square', 'circle', 'mixed'] as const).map(s => (
+                                            <button 
+                                                key={s}
+                                                onClick={() => setShape(s)}
+                                                className={`px-3 py-1 text-[10px] uppercase font-bold rounded-md transition-all ${shape === s ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-500 hover:text-gray-300'}`}
+                                            >
+                                                {s}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                             </div>
+
                             {/* Color Palette */}
                             <div>
                                 <div className="flex justify-between items-center mb-3">
@@ -223,7 +245,46 @@ export default function App() {
                                 />
                             </div>
 
-                            {/* 3. Grid Density (Sampling) */}
+                            {/* 3. Size Randomness */}
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Size Randomness</label>
+                                    <span className="text-xs font-mono text-neon-blue">{(sizeVariance * 100).toFixed(0)}%</span>
+                                </div>
+                                <input 
+                                    type="range" min="0" max="1" step="0.1"
+                                    value={sizeVariance} onChange={(e) => setSizeVariance(parseFloat(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                            </div>
+
+                             {/* 4. Glow Intensity */}
+                             <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Glow Strength</label>
+                                    <span className="text-xs font-mono text-neon-blue">{glow}px</span>
+                                </div>
+                                <input 
+                                    type="range" min="0" max="50" step="1"
+                                    value={glow} onChange={(e) => setGlow(parseInt(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                            </div>
+
+                            {/* 5. Trail Persistence */}
+                            <div>
+                                <div className="flex justify-between mb-2">
+                                    <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Motion Trails</label>
+                                    <span className="text-xs font-mono text-neon-blue">{(trail * 100).toFixed(0)}%</span>
+                                </div>
+                                <input 
+                                    type="range" min="0" max="1" step="0.1"
+                                    value={trail} onChange={(e) => setTrail(parseFloat(e.target.value))}
+                                    className="w-full h-1.5 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-neon-blue hover:accent-white transition-all"
+                                />
+                            </div>
+
+                            {/* 6. Grid Density (Sampling) */}
                             <div>
                                 <div className="flex justify-between mb-2">
                                     <label className="text-[10px] uppercase text-gray-500 font-mono tracking-widest">Grid Density</label>
@@ -244,8 +305,6 @@ export default function App() {
 
                         </div>
                     </section>
-
-                    {/* REMOVED: Section 04 Export Format (Now integrated into button) */}
                 </div>
             </div>
             
@@ -356,6 +415,10 @@ export default function App() {
                                 speed={speed}
                                 particleSizeMultiplier={particleSize}
                                 density={density}
+                                shape={shape}
+                                sizeVariance={sizeVariance}
+                                glowIntensity={glow} // NEW PROP
+                                trailPersistence={trail} // NEW PROP
                                 onStatusChange={setStatus}
                                 triggerAnimation={triggerAnim} 
                                 triggerRecording={triggerRec} 

@@ -1,34 +1,44 @@
 
 export enum EffectType {
-  ASSEMBLE = 'ASSEMBLE', // Renamed from CONVERGE for clarity
-  ELASTIC = 'ELASTIC',   // New: Bouncy arrival
-  GALACTIC = 'GALACTIC', // Renamed/Refined Spiral
-  GLITCH = 'GLITCH',     // New: Cyberpunk teleport
-  LIQUID = 'LIQUID',     // New: Sine wave flow
-  VORTEX = 'VORTEX',     // Existing
-  SCANWAVE = 'SCANWAVE', // Existing
+  ASSEMBLE = 'ASSEMBLE', 
+  ELASTIC = 'ELASTIC',   
+  GALACTIC = 'GALACTIC', 
+  GLITCH = 'GLITCH',     
+  LIQUID = 'LIQUID',     
+  VORTEX = 'VORTEX',     
+  SCANWAVE = 'SCANWAVE', 
+  STIPPLE = 'STIPPLE',   // New: 3D Stipple effect
 }
 
 export type ColorMode = 'solid' | 'gradient';
+export type ParticleShape = 'square' | 'circle' | 'mixed'; // New: Shape control
 
 export type OutputFormat = 'webm' | 'mp4';
 
 export interface ColorConfig {
     mode: ColorMode;
-    colorA: string; // Primary/Start Color
-    colorB: string; // Secondary/End Color
+    colorA: string; 
+    colorB: string; 
 }
 
 export interface Particle {
   startX: number;
   startY: number;
+  startZ: number;   // New: 3D Depth Start
+  
   currentX: number;
   currentY: number;
+  currentZ: number; // New: 3D Depth Current
+
   targetX: number;
   targetY: number;
+  targetZ: number;  // New: Usually 0 for the flat QR
+
   size: number;
-  delay: number; // 0 to 1 range relative to total animation time
-  color?: string; // Optional per-particle override (for complex gradients)
+  sizeVariation: number; // New: Random factor for organic look (0.5 - 1.5)
+  delay: number; 
+  shape: 'square' | 'circle'; // New: Per-particle shape
+  color?: string; 
 }
 
 export interface Point {
