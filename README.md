@@ -1,112 +1,116 @@
 
-<!-- HEADER & LOGO -->
+<!-- TERMINAL HEADER DESIGN -->
 <div align="center">
-  <img src="https://img.shields.io/badge/v2.2-Particle_System_Active-00f3ff?style=flat-square&logo=react&logoColor=black&labelColor=black" />
-  <br />
-  <br />
+  <img src="https://img.shields.io/badge/SYSTEM-ONLINE-00f3ff?style=for-the-badge&logo=linux&logoColor=black&labelColor=black" />
+  <img src="https://img.shields.io/badge/VERSION-2.2.0-bc13fe?style=for-the-badge&labelColor=black" />
   
-  <h1 style="border-bottom: none;">
-    <span style="font-size: 80px; background: linear-gradient(to right, #00f3ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);">
+  <br />
+  <br />
+
+  <!-- LOGO -->
+  <h1 style="margin: 0; font-size: 70px; letter-spacing: -2px;">
+    <span style="background: linear-gradient(to right, #00f3ff, #bc13fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: monospace; font-weight: 900;">
       QR MAGIC
     </span>
   </h1>
+
+  <!-- NEW TAGLINE: FOCUSED ON VIDEO CREATORS -->
+  <p style="font-size: 20px; color: #ffffff; font-family: monospace; font-weight: bold; margin-top: 10px;">
+    The Ultimate Cinematic Ending for Your Videos
+  </p>
   
-  <p style="font-size: 18px; color: #aaa; max-width: 600px;">
-    Decompile reality. Turn static QR codes into <b>interactive, cinematic particle swarms</b>.
-    <br/>
-    100% Client-Side. No Data Uploaded.
+  <p style="font-size: 14px; color: #888; max-width: 600px; line-height: 1.6; font-family: monospace;">
+    Stop ending your content with boring static images. <br/>
+    <b>QR Magic</b> decompiles your functional QR codes into stunning, high-bitrate particle animations. Perfect for YouTube outros, TikTok end-cards, and presentation finales.
   </p>
 
   <br />
 
-  <!-- 🚨🚨🚨 MASSIVE CALL TO ACTION 🚨🚨🚨 -->
-  <!-- This is a clickable image banner acting as a huge button -->
+  <!-- CTA BUTTON (NEON STYLE) -->
   <a href="https://qr-magic.vercel.app/" target="_blank">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/LAUNCH_APP-CLICK_TO_ENTER_THE_VOID-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=black&color=00f3ff" />
-      <img alt="Launch App" src="https://img.shields.io/badge/LAUNCH_APP-CLICK_TO_ENTER_THE_VOID-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=black&color=00f3ff" width="350" height="70" />
-    </picture>
+    <img src="https://img.shields.io/badge/_INIT_GENERATOR-CLICK_TO_START-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=111111&color=00f3ff" height="50" alt="Launch App" />
   </a>
-  
-  <br />
-  <br />
-  <p style="font-size: 12px; color: #666; font-family: monospace;">
-    NO LOGIN REQUIRED • WORKS OFFLINE • FREE FOREVER
-  </p>
 </div>
 
-<hr style="border-color: #333; margin: 30px 0;" />
+<hr style="border-color: #333; margin: 40px 0;" />
 
-<!-- 🎬 VISUAL SHOWCASE GALLERY -->
-<!-- 💡 INSTRUCTION: Replace the 'src' attributes below with the URLs of your actual GIFs -->
-<h2 align="center">🔮 Visual Experiments</h2>
+<!-- VISUAL ASSETS SHOWCASE -->
+<h3 align="center" style="font-family: monospace; color: #888;">> VIEWING_ASSETS: /DEMO_LIBRARY</h3>
 
-<table align="center" style="border: none;">
+<table align="center" style="border-collapse: collapse; border: none;">
   <tr>
-    <td align="center" style="border: none; padding: 10px;">
-      <!-- PLACEHOLDER 1: Replace src with your 'Galaxy/Vortex' GIF -->
-      <img src="https://github.com/user-attachments/assets/520c8e2a-e108-46ab-9cde-11711e40623f" width="250" style="border-radius: 10px; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);" />
-      <br />
-      <br />
-      <b>🌌 Assemble</b>
+    <td align="center" width="33%" style="border: none; padding: 10px;">
+      <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
+        <img src="https://github.com/user-attachments/assets/520c8e2a-e108-46ab-9cde-11711e40623f" width="100%" style="border-radius: 4px;" alt="Assemble Effect" />
+        <br/>
+        <code style="color: #00f3ff; font-size: 10px;">MODE: ASSEMBLE</code>
+      </div>
     </td>
-    <td align="center" style="border: none; padding: 10px;">
-      <!-- PLACEHOLDER 2: Replace src with your 'Matrix/Glitch' GIF -->
-      <img src="https://github.com/user-attachments/assets/35b1d50a-2d0c-43a4-9d2b-cbf254b6e3d4" width="250" style="border-radius: 10px; box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);" />
-      <br />
-      <br />
-      <b>👾 Stipple</b>
+    <td align="center" width="33%" style="border: none; padding: 10px;">
+      <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
+        <img src="https://github.com/user-attachments/assets/35b1d50a-2d0c-43a4-9d2b-cbf254b6e3d4" width="100%" style="border-radius: 4px;" alt="Stipple Effect" />
+        <br/>
+        <code style="color: #bc13fe; font-size: 10px;">MODE: STIPPLE</code>
+      </div>
     </td>
-    <td align="center" style="border: none; padding: 10px;">
-      <!-- PLACEHOLDER 3: Replace src with your 'Stipple/Liquid' GIF -->
-      <img src="https://github.com/user-attachments/assets/5049f95d-8cb7-40ae-807d-2c9bb276ef17" width="250" style="border-radius: 10px; box-shadow: 0 0 20px rgba(10, 255, 0, 0.2);" />
-      <br />
-      <br />
-      <b>💧 Liquid</b>
+    <td align="center" width="33%" style="border: none; padding: 10px;">
+      <div style="background: #000; padding: 5px; border: 1px solid #333; border-radius: 8px;">
+        <img src="https://github.com/user-attachments/assets/5049f95d-8cb7-40ae-807d-2c9bb276ef17" width="100%" style="border-radius: 4px;" alt="Liquid Effect" />
+        <br/>
+        <code style="color: #0aff00; font-size: 10px;">MODE: LIQUID</code>
+      </div>
     </td>
   </tr>
 </table>
 
 <div align="center">
-  <br/>
-  <i>👆 These animations are generated in real-time using HTML5 Canvas.</i>
+  <p style="color: #666; font-size: 12px; font-family: monospace;">
+    * New animation engines are added frequently.
+  </p>
 </div>
-
-<hr style="border-color: #333; margin: 30px 0;" />
-
-## ⚡️ Key Features
-
-*   **🎬 6+ Particle Engines**: From *Cyberpunk* glitches to *Organic* liquid flows.
-*   **🎛️ Creator Control**: Adjust density, glow strength, speed, and particle shapes.
-*   **📹 Studio Export**: Record 60FPS `.mp4` or `.webm` videos directly from the browser.
-*   **🔒 Privacy First**: Zero server processing. Your QR codes are decompiled locally.
-
-## 🛠 Tech Stack
-
-<p align="left">
-  <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-</p>
-
-## 🚀 Run Locally
-
-```bash
-git clone https://github.com/nanaco666/QR-Magic.git
-cd QR-Magic
-npm install
-npm run dev
-```
 
 <br />
 
-<div align="center">
-  <a href="https://twitter.com/xwen_h">
-    <img src="https://img.shields.io/twitter/follow/xwen_h?style=social" alt="Twitter Follow" />
-  </a>
+<!-- TERMINAL STYLE DESCRIPTION -->
+<div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 20px; font-family: monospace; color: #c9d1d9;">
+  <div><span style="color: #00f3ff;">$</span> cat MISSION_STATEMENT.txt</div>
+  <br/>
+  <div style="padding-left: 20px; border-left: 2px solid #30363d;">
+    <p><b>Designed for Creators:</b></p>
+    <ul>
+      <li>🎥 <b>Cinematic Outros:</b> Give your audience a reason to scan.</li>
+      <li>⚡ <b>High Bitrate Export:</b> Download crisp 60FPS .mp4/.webm video files.</li>
+      <li>🎨 <b>Customizable:</b> Match your brand colors (Neon, Matrix, Clean White).</li>
+      <li>🔒 <b>100% Secure:</b> No server uploads. Processing happens in your browser.</li>
+    </ul>
+  </div>
 </div>
 
+<br />
+
+<!-- TECH STACK -->
 <div align="center">
-  <p style="color: #444; font-size: 10px; margin-top: 20px;">Created by @nanaco666</p>
+  <p style="font-family: monospace; color: #888;">> DEPENDENCIES_LOADED:</p>
+  <img src="https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/MP4_Muxer-FF5722?style=flat-square&logo=html5&logoColor=white" />
+</div>
+
+<br/>
+
+<!-- FOOTER -->
+<div align="center" style="font-family: monospace;">
+  <a href="https://twitter.com/xwen_h" target="_blank" style="text-decoration: none; color: #888;">
+    [ CONTACT_CREATOR ]
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/nanaco666" target="_blank" style="text-decoration: none; color: #888;">
+    [ GITHUB_PROFILE ]
+  </a>
+  <br/><br/>
+  <span style="color: #444; font-size: 10px;">
+    SYSTEM STATUS: OPERATIONAL • LICENSED UNDER MIT
+  </span>
 </div>

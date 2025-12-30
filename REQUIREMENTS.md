@@ -1,3 +1,4 @@
+
 # QR Particle Magic - Functional Requirements & Specifications (v1.0)
 
 ## 1. Core Functionality
@@ -37,7 +38,7 @@
 | **Spiral** | Center + small radius | Particles spiral out based on distance. | 0.05 |
 | **Matrix** | Correct X, Random Y (Top) | "Digital rain" effect falling into place. | 0.10 |
 | **Explosion** | Center (300, 300) | Explodes outward to target. | 0.08 |
-| **Vortex** | Far outside canvas (Circle) | Swirls inward from edges. | 0.04 |
+| **Vortex** | Far outside canvas (Circle) | Swirls inward to edges. | 0.04 |
 | **Raindrop** | Correct X, Y = -10 | Falls vertically, delay based on Y pos. | 0.15 |
 | **Scanwave** | Correct X/Y (jittered) | Invisible until "scan line" (delay) hits. | N/A (Flash) |
 
@@ -71,9 +72,3 @@
     3.  Recorder starts.
     4.  Animation plays to completion.
     5.  Recorder stops -> Blob created -> Auto-download trigger.
-
-## 5. AI Features
-
-*   **Provider**: Google Gemini API (`gemini-3-flash-preview`).
-*   **Function**: Generates social media captions.
-*   **Safety**: API Key must be provided via `process.env`.
