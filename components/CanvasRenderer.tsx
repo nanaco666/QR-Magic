@@ -222,7 +222,8 @@ const CanvasRenderer: React.FC<CanvasRendererProps> = ({
     ctx.shadowBlur = 0;
 
     const gradient = colorConfig.mode === 'gradient' 
-        ? ctx.createLinearGradient(0, 0, CANVAS_SIZE, CANVAS_SIZE) 
+        // CHANGED: Use Horizontal Gradient (0,0 -> Width,0) to match UI Preview logic (Left-to-Right)
+        ? ctx.createLinearGradient(0, 0, CANVAS_SIZE, 0) 
         : null;
     
     if (gradient) {
@@ -322,7 +323,8 @@ const CanvasRenderer: React.FC<CanvasRendererProps> = ({
       // --- Color & Gradient Setup ---
       let fillStyle: string | CanvasGradient = colorConfig.colorA;
       if (colorConfig.mode === 'gradient') {
-          const g = ctx.createLinearGradient(0,0, CANVAS_SIZE, CANVAS_SIZE);
+          // CHANGED: Use Horizontal Gradient (0,0 -> Width,0) to match UI Preview logic (Left-to-Right)
+          const g = ctx.createLinearGradient(0, 0, CANVAS_SIZE, 0);
           g.addColorStop(0, colorConfig.colorA);
           g.addColorStop(1, colorConfig.colorB);
           fillStyle = g;
